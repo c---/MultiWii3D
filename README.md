@@ -1,8 +1,9 @@
 MultiWii3D
 ==========
 
-MultiWii_shared with changes to support inverted flight via reversing motors 
+MultiWii with changes to support inverted flight via reversing motors 
 
-This is based on r1253 of MultiWii_shared
+MultiWii-2.2 is using the MultiWii 2.2 code base.
+MultiWii-svn is the code base from MultiWii svn; currently r1370
 
-simonk firmware needs RC_PULS_REVERSE enabled.  RCP_DEADBAND should be 24.  Low throttle pulse should be at 1060us, max throttle at 1860, and midpoint at 1460.
+simonk firmware needs RC_PULS_REVERSE=1, RCP_DEADBAND=24, STOP_RC_PULS=1060, FULL_RC_PULS=1860, throttle mid-point at 1460.
