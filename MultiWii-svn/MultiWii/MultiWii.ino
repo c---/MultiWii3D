@@ -726,6 +726,9 @@ void loop () {
     Read_OpenLRS_RC();
   #endif 
 
+  if (!rcOptions[BOXARM])
+    f.ARMED = 0;
+
   if (currentTime > rcTime ) { // 50Hz
     rcTime = currentTime + 20000;
     computeRC();

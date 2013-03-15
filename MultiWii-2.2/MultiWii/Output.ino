@@ -1267,9 +1267,9 @@ void mixTable() {
         motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
       #else
         if (rcData[THROTTLE] >= 1500)
-          motor[i] = constrain(motor[i], 1492, MAXTHROTTLE);
+          motor[i] = constrain(motor[i], 1514, MAXTHROTTLE);
         else
-          motor[i] = constrain(motor[i], conf.minthrottle, 1428);
+          motor[i] = constrain(motor[i], conf.minthrottle, 1406);
       #endif
       if (!f.ARMED)
         motor[i] = MINCOMMAND;
