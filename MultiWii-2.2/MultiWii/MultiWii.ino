@@ -923,7 +923,7 @@ void loop () {
     rcSticks = stTmp;
     
     // perform actions    
-    if (rcData[THROTTLE] <= MINCHECK) {            // THROTTLE at minimum
+    if (rcData[THROTTLE] > 1450 && rcData[THROTTLE] < 1550) { // THROTTLE at mid-stick
       errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0; errorGyroI[YAW] = 0;
       errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       if (conf.activate[BOXARM] > 0) {             // Arming/Disarming via ARM BOX

@@ -803,7 +803,7 @@ void initializeServo() {
 /********** Mixes the Computed stabilize values to the Motors & Servos  ***************/
 /**************************************************************************************/
 void mixTable() {
-  int16_t maxMotor;
+  int16_t maxMotor, minMotor;
   uint8_t i;
 
   #define PIDMIX(X,Y,Z) rcCommand[THROTTLE] + axisPID[ROLL]*X + axisPID[PITCH]*Y + YAW_DIRECTION * axisPID[YAW]*Z
@@ -829,16 +829,16 @@ void mixTable() {
       servo[5] = constrain(conf.tri_yaw_middle + YAW_DIRECTION * axisPID[YAW], TRI_YAW_CONSTRAINT_MIN, TRI_YAW_CONSTRAINT_MAX); //REAR
     #endif
     #ifdef QUADP
-      motor[0] = PIDMIX( 0,+1,-1); //REAR
-      motor[1] = PIDMIX(-1, 0,+1); //RIGHT
-      motor[2] = PIDMIX(+1, 0,+1); //LEFT
-      motor[3] = PIDMIX( 0,-1,-1); //FRONT
+      motor[0] = PIDMIX( 0/2,+1/2,-1/2); //REAR
+      motor[1] = PIDMIX(-1/2, 0/2,+1/2); //RIGHT
+      motor[2] = PIDMIX(+1/2, 0/2,+1/2); //LEFT
+      motor[3] = PIDMIX( 0/2,-1/2,-1/2); //FRONT
     #endif
     #ifdef QUADX
-      motor[0] = PIDMIX(-1,+1,-1); //REAR_R
-      motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
-      motor[2] = PIDMIX(+1,+1,+1); //REAR_L
-      motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+      motor[0] = PIDMIX(-1/2,+1/2,-1/2); //REAR_R
+      motor[1] = PIDMIX(-1/2,-1/2,+1/2); //FRONT_R
+      motor[2] = PIDMIX(+1/2,+1/2,+1/2); //REAR_L
+      motor[3] = PIDMIX(+1/2,-1/2,-1/2); //FRONT_L
     #endif
     #ifdef Y4
       motor[0] = PIDMIX(+0,+1,-1);   //REAR_1 CW
@@ -1250,25 +1250,27 @@ void mixTable() {
   /****************                normalize the Motors values                ******************/
   #ifdef LEAVE_HEADROOM_FOR_MOTORS
     // limit this leaving room for corrections to the first #n of all motors
-    maxMotor=motor[0];
-    for(i=1; i < LEAVE_HEADROOM_FOR_MOTORS; i++)
+    maxMotor=minMotor=motor[0];
+    for(i=1; i < LEAVE_HEADROOM_FOR_MOTORS; i++) {
       if (motor[i]>maxMotor) maxMotor=motor[i];
+      if (motor[i]<minMotor) minMotor=motor[i];
+    }
     if (maxMotor > MAXTHROTTLE) { // this is a way to still have good gyro corrections if at least one motor reaches its max.
       for(i=0; i < LEAVE_HEADROOM_FOR_MOTORS; i++)
         motor[i] -= maxMotor - MAXTHROTTLE;
+    } else if (minMotor < MINTHROTTLE) {
+      for(i=0; i < LEAVE_HEADROOM_FOR_MOTORS; i++)
+        motor[i] += MINTHROTTLE - minMotor
     }
     for (i = 0; i < NUMBER_MOTOR; i++) {
-      motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
-      #if defined(ALTHOLD_FAST_THROTTLE_CHANGE)
-        if (rcData[THROTTLE] < MINCHECK)
+      #ifdef MOTOR_STOP
+        motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
       #else
-        if ((rcData[THROTTLE] < MINCHECK) && !f.BARO_MODE)
+        if (rcData[THROTTLE] >= 1500)
+          motor[i] = constrain(motor[i], 1492, MAXTHROTTLE);
+        else
+          motor[i] = constrain(motor[i], conf.minthrottle, 1428);
       #endif
-        #ifndef MOTOR_STOP
-          motor[i] = conf.minthrottle;
-        #else
-          motor[i] = MINCOMMAND;
-        #endif
       if (!f.ARMED)
         motor[i] = MINCOMMAND;
     }

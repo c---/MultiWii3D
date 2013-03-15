@@ -806,7 +806,7 @@ void initializeServo() {
 /********** Mixes the Computed stabilize values to the Motors & Servos  ***************/
 /**************************************************************************************/
 void mixTable() {
-  int16_t maxMotor;
+  int16_t maxMotor, minMotor;
   uint8_t i;
 
   #define PIDMIX(X,Y,Z) rcCommand[THROTTLE] + axisPID[ROLL]*X + axisPID[PITCH]*Y + YAW_DIRECTION * axisPID[YAW]*Z
@@ -835,10 +835,10 @@ void mixTable() {
     motor[3] = PIDMIX( 0,-1,-1); //FRONT
   #endif
   #ifdef QUADX
-    motor[0] = PIDMIX(-1,+1,-1); //REAR_R
-    motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
-    motor[2] = PIDMIX(+1,+1,+1); //REAR_L
-    motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+    motor[0] = PIDMIX(-1/2,+1/2,-1/2); //REAR_R
+    motor[1] = PIDMIX(-1/2,-1/2,+1/2); //FRONT_R
+    motor[2] = PIDMIX(+1/2,+1/2,+1/2); //REAR_L
+    motor[3] = PIDMIX(+1/2,-1/2,-1/2); //FRONT_L
   #endif
   #ifdef Y4
     motor[0] = PIDMIX(+0,+1,-1);   //REAR_1 CW
@@ -1212,19 +1212,29 @@ void mixTable() {
   #endif
   
   /****************                Filter the Motors values                ******************/
-  maxMotor=motor[0];
-  for(i=1;i< NUMBER_MOTOR;i++)
+  // this is a way to still have good gyro corrections if at least one motor reaches its max or min.
+  maxMotor=minMotor=motor[0];
+  for(i=1;i< NUMBER_MOTOR;i++) {
     if (motor[i]>maxMotor) maxMotor=motor[i];
+    if (motor[i]<minMotor) minMotor=motor[i];
+  }
+  if (maxMotor > MAXTHROTTLE)
+    maxMotor = MAXTHROTTLE - maxMotor; // apply negative motor correction
+  else if (minMotor < MINTHROTTLE)
+    maxMotor = MINTHROTTLE - minMotor; // apply positive motor correction
+  else
+    maxMotor = 0;
+
   for (i = 0; i < NUMBER_MOTOR; i++) {
-    if (maxMotor > MAXTHROTTLE) // this is a way to still have good gyro corrections if at least one motor reaches its max.
-      motor[i] -= maxMotor - MAXTHROTTLE;
-    motor[i] = constrain(motor[i], MINTHROTTLE, MAXTHROTTLE);    
-    if ((rcData[THROTTLE]) < MINCHECK)
-      #ifndef MOTOR_STOP
-        motor[i] = MINTHROTTLE;
-      #else
-        motor[i] = MINCOMMAND;
-      #endif
+    motor[i] += maxMotor;
+    #ifdef MOTOR_STOP
+      motor[i] = constrain(motor[i], MINTHROTTLE, MAXTHROTTLE);
+    #else
+      if (rcData[THROTTLE] >= 1500)
+        motor[i] = constrain(motor[i], 1492, MAXTHROTTLE);    
+      else
+        motor[i] = constrain(motor[i], MINTHROTTLE, 1428);
+    #endif
     if (!f.ARMED)
       motor[i] = MINCOMMAND;
   }
