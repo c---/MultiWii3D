@@ -545,7 +545,7 @@
     #define FAILSAFE_DELAY     10                     // Guard time for failsafe activation after signal lost. 1 step = 0.1sec - 1sec in example
     #define FAILSAFE_OFF_DELAY 200                    // Time for Landing before motors stop in 0.1sec. 1 step = 0.1sec - 20sec in example
     //#define FAILSAFE_THROTTLE  (MINTHROTTLE + 200)    // Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
-    #define FAILSAFE_THROTTLE  1500                   // 3D mode; turn motors off
+    #define FAILSAFE_THROTTLE  (1500 + 75)            // simonk 3D; adjust for individual craft
 
 
   /*****************                DFRobot LED RING    *********************************/

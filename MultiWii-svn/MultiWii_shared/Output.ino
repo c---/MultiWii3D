@@ -1267,31 +1267,33 @@ void mixTable() {
         motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
       #else
         if (rcData[THROTTLE] >= 1500)
-           motor[i] = constrain(motor[i], 1514, MAXTHROTTLE);
+          motor[i] = constrain(motor[i], 1514, MAXTHROTTLE);
         else
-           motor[i] = constrain(motor[i], conf.minthrottle, 1406);
+          motor[i] = constrain(motor[i], conf.minthrottle, 1406);
       #endif
       if (!f.ARMED)
         motor[i] = MINCOMMAND;
     }
   #else // LEAVE_HEADROOM_FOR_MOTORS
-    maxMotor=motor[0];
-    for(i=1; i< NUMBER_MOTOR; i++)
+    maxMotor=minMotor=motor[0];
+    for(i=1; i< NUMBER_MOTOR; i++) {
       if (motor[i]>maxMotor) maxMotor=motor[i];
+      if (motor[i]<minMotor) minMotor=motor[i];
+    }
     for(i=0; i< NUMBER_MOTOR; i++) {
       if (maxMotor > MAXTHROTTLE) // this is a way to still have good gyro corrections if at least one motor reaches its max.
         motor[i] -= maxMotor - MAXTHROTTLE;
-      motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
-      #if defined(ALTHOLD_FAST_THROTTLE_CHANGE)
-        if (rcData[THROTTLE] < MINCHECK)
+      else if (minMotor < MINTHROTTLE)
+        motor[i] += MINTHROTTLE - minMotor;
+
+      #ifdef MOTOR_STOP
+        motor[i] = constrain(motor[i], conf.minthrottle, MAXTHROTTLE);
       #else
-        if ((rcData[THROTTLE] < MINCHECK) && !f.BARO_MODE)
+        if (rcData[THROTTLE] >= 1500)
+          motor[i] = constrain(motor[i], 1514, MAXTHROTTLE);
+        else
+          motor[i] = constrain(motor[i], conf.minthrottle, 1406);
       #endif
-        #ifndef MOTOR_STOP
-          motor[i] = conf.minthrottle;
-        #else
-          motor[i] = MINCOMMAND;
-        #endif
       if (!f.ARMED)
         motor[i] = MINCOMMAND;
     }
