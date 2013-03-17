@@ -7,6 +7,10 @@ MultiWii with changes to support inverted flight via reversing motors
  * MultiWii-svn is the code base from MultiWii svn; currently r1370
  * MultiWii-r1253 an old personal configuration I use on my quad
 
+Throttle above middle is forward rotation on the motors, below the middle and the motors rotate in reverse. The effect is similar to a CP helicopter.
+
+*WARNING* You must set up the "ARM" box in MultiWii. The sticks can not be used to arm and disarm.
+
 simonk firmware needs the following settings:
  * RC_PULS_REVERSE=1
  * RCP_DEADBAND=24
