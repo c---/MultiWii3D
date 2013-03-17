@@ -1,6 +1,8 @@
 MultiWii3D
 ==========
 
+This is experimental. Use at your own risk. Test without props attached. Unanticipated motor spool-ups are very likely at any time even if it seems like it's working. Not all ESC's, motors, and/or batteries may be able to handle the load of high speed reversing and could be damaged.
+
 MultiWii with changes to support inverted flight via reversing motors 
 
  * MultiWii-2.2 is using the MultiWii 2.2 code base
