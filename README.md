@@ -11,7 +11,7 @@ MultiWii with changes to support inverted flight via reversing motors
 
 Throttle above middle is forward rotation on the motors, below the middle and the motors rotate in reverse. The effect is similar to a CP helicopter.
 
-** WARNING ** You must set up the "ARM" box in MultiWii. The sticks can not be used to arm and disarm.
+**WARNING** You must set up the "ARM" box in MultiWii. The sticks can not be used to arm and disarm.
 
 simonk firmware needs the following settings:
  * RC_PULS_REVERSE=1
@@ -22,7 +22,7 @@ simonk firmware needs the following settings:
 
 Be careful if you calibrated the ESC's. MultiWii sends its own timing that may not match your TX. Generally you want no calibration data on the ESC so that the ESC will use the above values compiled in to the firmware. However, the calibration settings can also be manually updated (see below).
 
-Pre-built simonk hex files are provided in the simonk directory. Inside there are also EEPROM.hex file(s) that can be used to set the calibration to the exact needed values. EEPROM_16mhz.hex is for ESC's with external 16mHz oscillator.  ** NOTE ** The EEPROM hex file can not be flashed like a normal flash hex file, it must be flashed to the EEPROM area only. This can be done manually with avrdude using a command similar to the following:  (modify for your specific programmer setup)
+Pre-built simonk hex files are provided in the simonk directory. Inside there are also EEPROM.hex file(s) that can be used to set the calibration to the exact needed values. EEPROM_16mhz.hex is for ESC's with external 16mHz oscillator.  **NOTE** The EEPROM hex file can not be flashed like a normal flash hex file, it must be flashed to the EEPROM area only. This can be done manually with avrdude using a command similar to the following:  (modify for your specific programmer setup)
 
 <code>avrdude -c stk500v2 -b 9600 -P /dev/ttyUSB0 -u -p m8 -D -U eeprom:w:EEPROM_16mhz.hex:i</code>
 
