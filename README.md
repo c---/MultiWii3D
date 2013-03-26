@@ -26,3 +26,6 @@ Pre-built simonk hex files are provided in the simonk directory. Inside there ar
 
 <code>avrdude -c stk500v2 -b 9600 -P /dev/ttyUSB0 -u -p m8 -D -U eeprom:w:EEPROM_16mhz.hex:i</code>
 
+Donations are accepted should you feel the desire:
+http://luadev.com/rc
+
