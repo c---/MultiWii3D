@@ -480,8 +480,8 @@ clear_loop1:	cp	ZL, r0
 		ldi	XL, low(eeprom_sig_l) + 2
 		ld	temp2, -X
 		ld	temp1, -X		; Leave X at eeprom_sig_l
-		subi	temp1, low(EEPROM_SIGN)
-		sbci	temp2, high(EEPROM_SIGN)
+		subi	temp1, low(EEPROM_SIGN+1)
+		sbci	temp2, high(EEPROM_SIGN+1)
 		breq	eeprom_good
 
 	; Signature not good: set defaults in RAM, but do not write
