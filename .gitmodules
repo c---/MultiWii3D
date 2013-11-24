@@ -1,0 +1,3 @@
+[submodule "simonk_tgy3d"]
+	path = simonk_tgy3d
+	url = git@github.com:c---/simonk_tgy3d.git
