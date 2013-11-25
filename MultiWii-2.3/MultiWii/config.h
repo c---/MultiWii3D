@@ -58,20 +58,27 @@
        This is the minimum value that allow motors to run at a idle speed  */
     //#define MINTHROTTLE 1300 // for Turnigy Plush ESCs 10A
     //#define MINTHROTTLE 1120 // for Super Simple ESCs 10A
-    //#define MINTHROTTLE 1064 // special ESC (simonk)
+    #define MINTHROTTLE 1064 // special ESC (simonk)
     //#define MINTHROTTLE 1050 // for brushed ESCs like ladybird
-    #define MINTHROTTLE 1150 // (*) (**)
+    //#define MINTHROTTLE 1150 // (*) (**)
 
   /****************************    Motor maxthrottle    *******************************/
     /* this is the maximum value for the ESCs at full power, this value can be increased up to 2000 */
-    #define MAXTHROTTLE 1850
+    //#define MAXTHROTTLE 1850
+    #define MAXTHROTTLE 1860 // special ESC (simonk)
 
   /****************************    Mincommand          *******************************/
     /* this is the value for the ESCs when they are not armed
        in some cases, this value must be lowered down to 900 for some specific ESCs, otherwise they failed to initiate */
-    #define MINCOMMAND  1000
+    //#define MINCOMMAND  1000
+    #define MINCOMMAND  1460  // MultiWii 3D (simonk)
 
-  /**********************************    I2C speed   ************************************/
+  /****************************    MultiWii 3D         *******************************/
+    #define MULTIWII3D
+    #define MIN_FWD_THROTTLE 1514
+    #define MIN_REV_THROTTLE 1406
+
+  /**********************************  I2C speed for old WMP config (useless config for other sensors)  *************/
     #define I2C_SPEED 100000L     //100kHz normal mode, this value must be used for a genuine WMP
     //#define I2C_SPEED 400000L   //400kHz fast mode, it works only with some WMP clones
 
@@ -231,7 +238,7 @@
    /********************************    ARM/DISARM    *********************************/
    /* optionally disable stick combinations to arm/disarm the motors.
      * In most cases one of the two options to arm/disarm via TX stick is sufficient */
-    #define ALLOW_ARM_DISARM_VIA_TX_YAW
+    //#define ALLOW_ARM_DISARM_VIA_TX_YAW
     //#define ALLOW_ARM_DISARM_VIA_TX_ROLL
 
     /********************************    SERVOS      *********************************/
@@ -571,7 +578,8 @@
     //#define FAILSAFE                                // uncomment  to activate the failsafe function
     #define FAILSAFE_DELAY     10                     // Guard time for failsafe activation after signal lost. 1 step = 0.1sec - 1sec in example
     #define FAILSAFE_OFF_DELAY 200                    // Time for Landing before motors stop in 0.1sec. 1 step = 0.1sec - 20sec in example
-    #define FAILSAFE_THROTTLE  (MINTHROTTLE + 200)    // (*) Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
+    //#define FAILSAFE_THROTTLE  (MINTHROTTLE + 200)    // (*) Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
+    #define FAILSAFE_THROTTLE  (MIN_FWD_THROTTLE + 50) // MultiWii 3D
     
     #define FAILSAFE_DETECT_TRESHOLD  985
 
