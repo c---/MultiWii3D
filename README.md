@@ -5,20 +5,21 @@ This is experimental. Use at your own risk. Test without props attached. Unantic
 
 MultiWii with changes to support inverted flight via reversing motors 
 
- * MultiWii-2.2 is using the MultiWii 2.2 code base
- * MultiWii-svn is the code base from MultiWii svn; currently r1370
- * MultiWii-r1253 an old personal configuration I use on my quad
-
 Throttle above middle is forward rotation on the motors, below the middle and the motors rotate in reverse. The effect is similar to a CP helicopter.
 
 **WARNING** You must set up the "ARM" box in MultiWii. The sticks can not be used to arm and disarm.
 
 simonk firmware needs the following settings:
- * RC_PULS_REVERSE=1
- * RCP_DEADBAND=24
- * STOP_RC_PULS=1060
- * FULL_RC_PULS=1860
+
+Older versions of simonk:
+ * RC_PULS_REVERSE = 1
+ * RCP_DEADBAND = 24
+ * STOP_RC_PULS = 1060
+ * FULL_RC_PULS = 1860
  * throttle neutral at 1460
+
+Newer versions of simonk should additionally set:
+ * RC_CALIBRATION = 0
 
 Be careful if you calibrated the ESC's. MultiWii sends its own timing that may not match your TX. Generally you want no calibration data on the ESC so that the ESC will use the above values compiled in to the firmware. However, the calibration settings can also be manually updated (see below).
 
@@ -26,6 +27,6 @@ Pre-built simonk hex files are provided in the simonk directory. Inside there ar
 
 <code>avrdude -c stk500v2 -b 9600 -P /dev/ttyUSB0 -u -p m8 -D -U eeprom:w:EEPROM_16mhz.hex:i</code>
 
-Donations are accepted should you feel the desire:
-http://luadev.com/rc
+Donations are accepted should you feel the desire (see donation button at bottom of page):
+http://lunarflow.com/
 
