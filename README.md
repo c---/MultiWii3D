@@ -1,6 +1,8 @@
 MultiWii3D
 ==========
 
+**WARNING** The MultiWii 2.3 branch is very new and unstable, be careful when testing it. I have at least one issue that causes all motors to stop while flying.
+
 This is experimental. Use at your own risk. Test without props attached. Unanticipated motor spool-ups are very likely at any time even if it seems like it's working. Not all ESC's, motors, and/or batteries may be able to handle the load of high speed reversing and could be damaged.
 
 MultiWii with changes to support inverted flight via reversing motors 
